@@ -103,7 +103,7 @@ impl SoundData {
         let nb_sample = infos.channels as i64 * infos.frames;
 
         let mut samples = vec![0i16; nb_sample as usize];
-        file.read_i16(&mut samples[..], nb_sample as i64);
+        file.read_i16(&mut samples[..], nb_sample);
 
         let mut buffer_id = 0;
         let len = mem::size_of::<i16>() * (samples.len());
@@ -132,7 +132,7 @@ impl SoundData {
         let sound_data = SoundData {
             sound_tags: get_sound_tags(&file),
             snd_info: infos,
-            nb_sample: nb_sample,
+            nb_sample,
             al_buffer: buffer_id,
         };
         file.close();
@@ -147,7 +147,7 @@ impl SoundData {
  * # Return
  * The struct SndInfo.
  */
-pub fn get_sndinfo<'r>(s_data: &'r SoundData) -> &'r SndInfo {
+pub fn get_sndinfo(s_data: &SoundData) -> &SndInfo {
     &s_data.snd_info
 }
 
@@ -176,7 +176,7 @@ impl AudioTags for SoundData {
 
 impl Drop for SoundData {
     /// Destroy all the resources attached to the SoundData
-    fn drop(&mut self) -> () {
+    fn drop(&mut self) {
         unsafe {
             ffi::alDeleteBuffers(1, &mut self.al_buffer);
         }
@@ -187,20 +187,19 @@ impl Drop for SoundData {
 mod test {
     #![allow(non_snake_case)]
 
-    #[allow(unused_variables)]
     use sound_data::SoundData;
 
     #[test]
     #[ignore]
-    fn sounddata_create_OK() -> () {
+    fn sounddata_create_OK() {
         #![allow(unused_variables)]
-        let snd_data = SoundData::new("res/shot.wav").unwrap();
+        let snd_data = SoundData::new("res/shots.ogg").unwrap();
     }
 
     #[test]
     #[ignore]
     #[should_panic]
-    fn sounddata_create_FAIL() -> () {
+    fn sounddata_create_FAIL() {
         #![allow(unused_variables)]
         let snd_data = SoundData::new("toto.wav").unwrap();
     }

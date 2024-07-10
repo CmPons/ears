@@ -29,7 +29,7 @@ pub struct RecordContext {
 
 pub fn new(capt_device: ffi::ALCdevicePtr) -> RecordContext {
     RecordContext {
-        capt_device: capt_device,
+        capt_device,
     }
 }
 

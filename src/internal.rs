@@ -155,7 +155,7 @@ impl OpenAlData {
                             ffi::alcIsExtensionPresent(new_context.al_device, c_str.as_ptr())
                         } == ffi::ALC_FALSE
                         {
-                            return Err(OpenAlContextError::NoInputDevice);
+                            Err(OpenAlContextError::NoInputDevice)
                         } else {
                             new_context.al_capt_device = unsafe {
                                 ffi::alcCaptureOpenDevice(
@@ -166,15 +166,15 @@ impl OpenAlData {
                                 )
                             };
                             if new_context.al_capt_device == 0 {
-                                return Err(OpenAlContextError::DefaultCaptureDeviceError);
+                                Err(OpenAlContextError::DefaultCaptureDeviceError)
                             } else {
                                 let cap_device = new_context.al_capt_device;
-                                return Ok(record_context::new(cap_device));
+                                Ok(record_context::new(cap_device))
                             }
                         }
                     }
                 } else {
-                    return Err(OpenAlContextError::WrongThread);
+                    Err(OpenAlContextError::WrongThread)
                 }
             }
             Err(poison_error) => Err(OpenAlContextError::LockError(poison_error.to_string())),
@@ -232,4 +232,11 @@ macro_rules! check_openal_context(
                 Err(err) => { println!("{}", err); return $def_ret; }
             }
         );
+    () => (
+
+            match OpenAlData::check_al_context() {
+                Ok(_)    => {},
+                Err(err) => { println!("{}", err); return (); }
+            }
+    )
 );

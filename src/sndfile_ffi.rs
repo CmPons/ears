@@ -171,7 +171,7 @@ pub const SF_FORMAT_SUBMASK: FORMAT_TYPE = 0x0000FFFF;
 pub const SF_FORMAT_TYPEMASK: FORMAT_TYPE = 0x0FFF0000;
 pub const SF_FORMAT_ENDMASK: FORMAT_TYPE = 0x30000000;
 
-pub type SNDFILE = c_void;
+pub type SndFile = c_void;
 pub type SNDFILEhandle = intptr_t;
 
 #[repr(C)]
@@ -202,7 +202,7 @@ extern "C" {
     pub fn sf_error_str(sndfile: SNDFILEhandle, string: *mut c_char, len: i64);
 
     pub fn sf_close(sndfile: SNDFILEhandle) -> Error;
-    pub fn sf_write_sync(sndfile: SNDFILEhandle) -> ();
+    pub fn sf_write_sync(sndfile: SNDFILEhandle);
 
     pub fn sf_read_short(sndfile: SNDFILEhandle, ptr: *mut i16, items: i64) -> i64;
     pub fn sf_read_int(sndfile: SNDFILEhandle, ptr: *mut i32, items: i64) -> i64;

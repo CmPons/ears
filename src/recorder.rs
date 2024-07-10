@@ -86,7 +86,7 @@ impl Recorder {
     pub fn start(&mut self) {
         let (stop_sender, stop_receiver) = channel();
         let (data_sender, data_receiver) = channel();
-        let r_c = self.ctxt.clone();
+        let r_c = self.ctxt;
 
         self.stop_sender = Some(stop_sender);
         self.data_receiver = Some(data_receiver);
@@ -115,19 +115,20 @@ impl Recorder {
                     if available_samples != 0 {
                         let tmp_buf = vec![0i16; available_samples as usize];
                         unsafe {
-                            ffi::alcCaptureSamples(ctxt, transmute(&tmp_buf[0]), available_samples);
+                            ffi::alcCaptureSamples(
+                                ctxt,
+                                &tmp_buf[0] as *const i16 as *mut libc::c_void,
+                                available_samples,
+                            );
                         }
                         samples.extend(tmp_buf.into_iter());
                     }
 
-                    match stop_receiver.try_recv() {
-                        Ok(_) => {
-                            unsafe {
-                                ffi::alcCaptureStop(ctxt);
-                            }
-                            terminate = true;
+                    if stop_receiver.try_recv().is_ok() {
+                        unsafe {
+                            ffi::alcCaptureStop(ctxt);
                         }
-                        _ => {}
+                        terminate = true;
                     }
                 }
                 data_sender.send(samples);
@@ -152,7 +153,7 @@ impl Recorder {
     }
 
     pub fn save_to_file(&mut self, filename: &str) -> bool {
-        if self.samples.len() == 0 {
+        if self.samples.is_empty() {
             false
         } else {
             let infos = Box::new(SndInfo {

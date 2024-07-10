@@ -40,8 +40,8 @@ use openal::{al, ffi};
  * listener::set_volume(0.7f32);
  * ```
  */
-pub fn set_volume(volume: f32) -> () {
-    check_openal_context!(());
+pub fn set_volume(volume: f32) {
+    check_openal_context!();
     al::alListenerf(ffi::AL_GAIN, volume);
 }
 
@@ -86,8 +86,8 @@ pub fn get_volume() -> f32 {
  * # use ears::listener;
  * listener::set_position([45., 90., 35.]);
  */
-pub fn set_position(position: [f32; 3]) -> () {
-    check_openal_context!(());
+pub fn set_position(position: [f32; 3]) {
+    check_openal_context!();
     al::alListenerfv(ffi::AL_POSITION, &position[0]);
 }
 
@@ -129,7 +129,7 @@ pub fn get_position() -> [f32; 3] {
  * ```
  */
 pub fn set_orientation(orientation_at: [f32; 3], orientation_up: [f32; 3]) {
-    check_openal_context!(());
+    check_openal_context!();
     let orientation: [f32; 6] = [
         orientation_at[0],
         orientation_at[1],
@@ -174,8 +174,8 @@ pub fn get_orientation() -> ([f32; 3], [f32; 3]) {
  * * `velocity` - A three dimensional vector of f32 containing the velocity
  * of the sound [x, y, z].
  */
-pub fn set_velocity(velocity: [f32; 3]) -> () {
-    check_openal_context!(());
+pub fn set_velocity(velocity: [f32; 3]) {
+    check_openal_context!();
 
     al::alListenerfv(ffi::AL_VELOCITY, &velocity[0]);
 }
@@ -203,7 +203,7 @@ mod test {
 
     #[test]
     #[ignore]
-    pub fn listener_set_volume() -> () {
+    pub fn listener_set_volume() {
         set_volume(0.77);
         assert_eq!(get_volume(), 0.77);
     }
@@ -212,7 +212,7 @@ mod test {
 
     #[test]
     #[ignore]
-    pub fn listener_set_position() -> () {
+    pub fn listener_set_position() {
         set_position([50f32, 150f32, 234f32]);
         let res = get_position();
         assert_eq!((res[0], res[1], res[2]), (50f32, 150f32, 234f32))
@@ -220,7 +220,7 @@ mod test {
 
     #[test]
     #[ignore]
-    pub fn listener_set_orientation() -> () {
+    pub fn listener_set_orientation() {
         set_orientation([50., 150., 234.], [277., 125., 71.]);
         let (s1, s2) = get_orientation();
         assert_eq!(s1, [50f32, 150f32, 234f32]);

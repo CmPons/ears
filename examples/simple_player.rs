@@ -41,11 +41,11 @@ fn main() {
         match &line[line.len() - 1..] {
             "\n" => {
                 line.pop();
-                ()
+                
             }
             "\r" => {
                 line.pop();
-                ()
+                
             }
             _ => {
                 break;

@@ -46,7 +46,7 @@ use record_context::RecordContext;
  * ```
  */
 pub fn init() -> Result<(), OpenAlContextError> {
-    return OpenAlData::check_al_context();
+    OpenAlData::check_al_context()
 }
 
 /**
@@ -64,7 +64,7 @@ pub fn init() -> Result<(), OpenAlContextError> {
  * ```
  */
 pub fn init_in() -> Result<RecordContext, OpenAlContextError> {
-    return OpenAlData::check_al_input_context();
+    OpenAlData::check_al_input_context()
 }
 
 #[cfg(test)]
@@ -77,26 +77,26 @@ mod test {
 
     #[test]
     #[ignore]
-    fn test_init_ears_OK() -> () {
+    fn test_init_ears_OK() {
         assert!(init().is_ok())
     }
 
     #[test]
     #[ignore]
-    fn test_init_in_with_normal_init_OK() -> () {
+    fn test_init_in_with_normal_init_OK() {
         init();
         assert!(init_in().is_ok())
     }
 
     #[test]
     #[ignore]
-    fn test_init_in_alone_OK() -> () {
+    fn test_init_in_alone_OK() {
         assert!(init_in().is_ok())
     }
 
     #[test]
     #[ignore]
-    fn test_init_in_in_another_task_OK() -> () {
+    fn test_init_in_in_another_task_OK() {
         init();
         thread::spawn(move || assert!(init_in().is_err()));
     }
