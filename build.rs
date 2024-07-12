@@ -11,7 +11,12 @@ fn main() {
         return;
     }
 
-    for name in ["openal", "sndfile"].iter() {
+    let cwd = env::var("CARGO_MANIFEST_DIR").unwrap();
+    let sndfiledir = cwd + "/third_party/sndfile/libs";
+    println!("cargo:rustc-link-search={}", sndfiledir);
+    println!("cargo:rustc-link-lib=static=sndfile");
+
+    for name in ["openal"].iter() {
         let lib = pkg_config::Config::new()
             .print_system_libs(false)
             .find(name)
