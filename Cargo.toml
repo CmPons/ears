@@ -1,19 +1,23 @@
 [package]
 name = "ears"
 version = "0.8.0"
-authors = ["Jeremy Letang <letang.jeremy@gmail.com>", "Jan Niklas Hasse <jhasse@bixense.com>", "Nick Browne <nickbrowne@users.noreply.github.com>"]
+authors = [
+  "Jeremy Letang <letang.jeremy@gmail.com>",
+  "Jan Niklas Hasse <jhasse@bixense.com>",
+  "Nick Browne <nickbrowne@users.noreply.github.com>",
+]
 license = "MIT"
 keywords = ["audio", "openal", "sndfile", "sound", "music"]
 readme = "README.md"
 build = "build.rs"
-exclude = [ "appveyor.yml", ".travis.yml", "res/*" ]
+exclude = ["appveyor.yml", ".travis.yml", "res/*"]
 repository = "https://github.com/nickbrowne/ears"
 documentation = "https://docs.rs/ears/"
 description = "Easy Rust API to play audio using OpenAL"
 
 [lib]
 name = "ears"
-crate-type = ["dylib", "rlib"]
+crate-type = ["rlib"]
 
 [dependencies]
 libc = "0.2"

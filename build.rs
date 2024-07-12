@@ -5,30 +5,11 @@ extern crate pkg_config;
 fn main() {
     use std::env;
 
-    // HACK to just get everything building
-    let target_arch = env::var("CARGO_CFG_TARGET_ARCH").unwrap_or_default();
-    if target_arch.as_str() == "wasm32" {
-        return;
-    }
-
     let cwd = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let sndfiledir = cwd + "/third_party/sndfile/libs";
-    println!("cargo:rustc-link-search={}", sndfiledir);
-    println!("cargo:rustc-link-lib=static=sndfile");
-
-    for name in ["openal"].iter() {
-        let lib = pkg_config::Config::new()
-            .print_system_libs(false)
-            .find(name)
-            .unwrap();
-
-        for include in lib.include_paths.iter() {
-            println!("cargo:include={}", include.display());
-        }
-
-        for link in lib.link_paths.iter() {
-            println!("cargo:rustc-link-search=native={}", link.display());
-        }
+    for name in ["sndfile", "openal"].iter() {
+        let searchdir = cwd.clone() + "/third_party/" + name + "/libs";
+        println!("cargo:rustc-link-search={}", searchdir);
+        println!("cargo:rustc-link-lib=static={}", name);
     }
 }
 
